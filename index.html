@@ -4,81 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>価値観マップ</title>
-    <script src="https://cdn.jsdelivr.net/npm/mind-elixir@1.0.1/dist/mind-elixir.js"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
-        #mindmap { width: 100%; height: 80vh; border: 1px solid #ccc; margin: 20px auto; }
-        button { margin: 5px; padding: 10px; font-size: 16px; }
+        .help-button { position: fixed; top: 10px; right: 10px; padding: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .help-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 400px; background: white; padding: 20px; border: 2px solid #007bff; box-shadow: 0px 0px 10px gray; }
+        .close-button { background: red; color: white; border: none; padding: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <h1>価値観マップ</h1>
-    <button onclick="saveMindMap()">保存</button>
-    <button onclick="loadMindMap()">ロード</button>
-    <button onclick="clearMindMap()">クリア</button>
+    <button class="help-button" onclick="showHelp()">❓ 操作方法</button>
 
-    <div id="mindmap"></div>
+    <div id="helpModal" class="help-modal">
+        <h2>📌 操作方法</h2>
+        <p>✅ **ノードを追加** → 長押し or 右クリックで「子ノードを追加」</p>
+        <p>✅ **ノードを編集** → ダブルタップで変更</p>
+        <p>✅ **ノードを移動** → ドラッグ＆ドロップで調整</p>
+        <p>✅ **ノードを削除** → 長押し or 右クリックで「削除」</p>
+        <p>✅ **保存** → 「保存」ボタンでローカル保存</p>
+        <p>✅ **ロード** → 「ロード」ボタンで復元</p>
+        <button class="close-button" onclick="closeHelp()">閉じる</button>
+    </div>
 
     <script>
-        let mind = new MindElixir({
-            el: '#mindmap',
-            direction: MindElixir.RIGHT, // 価値観マップは右展開が見やすい
-            draggable: true,
-            contextMenu: true,
-            toolBar: true,
-            nodeMenu: true,
-            keypress: true
-        });
-
-        // 価値観マップ向けの初期ノードデータ
-        let initialData = {
-            nodeData: {
-                id: 'root',
-                topic: '私の価値観 💡',
-                children: [
-                    { id: '1', topic: '人生の価値観 🌍', children: [
-                        { id: '1-1', topic: '自由 ✈️' },
-                        { id: '1-2', topic: '成長 📚' }
-                    ]},
-                    { id: '2', topic: '仕事の価値観 💼', children: [
-                        { id: '2-1', topic: 'やりがい 🔥' },
-                        { id: '2-2', topic: '収入 💰' }
-                    ]},
-                    { id: '3', topic: '家族 👨‍👩‍👧‍👦', children: [
-                        { id: '3-1', topic: '愛 ❤️' },
-                        { id: '3-2', topic: '時間 ⏳' }
-                    ]},
-                    { id: '4', topic: '健康 💪', children: [
-                        { id: '4-1', topic: '運動 🏃' },
-                        { id: '4-2', topic: '食事 🍎' }
-                    ]}
-                ]
-            },
-            linkData: {}
-        };
-
-        mind.init(initialData);
-
-        function saveMindMap() {
-            localStorage.setItem('mindmapData', JSON.stringify(mind.getData()));
-            alert('価値観マップを保存しました！');
+        function showHelp() {
+            document.getElementById("helpModal").style.display = "block";
         }
-
-        function loadMindMap() {
-            const savedData = localStorage.getItem('mindmapData');
-            if (savedData) {
-                mind.refresh(JSON.parse(savedData));
-                alert('保存した価値観マップをロードしました！');
-            } else {
-                alert('保存データがありません。');
-            }
-        }
-
-        function clearMindMap() {
-            localStorage.removeItem('mindmapData');
-            mind.init(initialData);
-            alert('価値観マップをリセットしました！');
+        function closeHelp() {
+            document.getElementById("helpModal").style.display = "none";
         }
     </script>
 
